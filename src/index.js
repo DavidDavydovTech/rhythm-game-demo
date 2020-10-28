@@ -19,10 +19,11 @@ import { sectionData, createTrack } from './lib/createTrack';
 
 class App {
     constructor() {
+        document.body.style.margin = "0px";
         // Create Canvas and attatch to the DOM
         var canvas = document.createElement("canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
+        canvas.style.width = "100vw";
+        canvas.style.height = "100vh";
         canvas.id = "gameCanvas";
         document.body.appendChild(canvas);
 
@@ -61,7 +62,6 @@ class App {
         // Create the sphere riding the track
         var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
         player.material = fbRed;
-        camera.lockedTarget = player
         // Create a whirlpool points
         var points = [];
         var radius = 0.1;
@@ -110,17 +110,13 @@ class App {
             let currentX = radius * Math.cos(angle)
             let currentY = 20 * Math.sin(estimatedPosition * 0.02)
             let currentZ = radius * Math.sin(angle)
-            player.position = new Vector3(currentX, currentY, currentZ);
+            let newPosition = new Vector3(currentX, currentY, currentZ);
+            player.position = newPosition;
             
+            camera.setTarget(newPosition);
             camera.position.x -= (camera.position.x - player.position.x + 20) / 25
             camera.position.y -= (camera.position.y - player.position.y - 20) / 25
             camera.position.z -= (camera.position.z - player.position.z + 20) / 25
-            // theta = Math.acos(Vector3.Dot(normals[i],normals[i+1]));
-            // var dir = Vector3.Cross(normals[i],normals[i+1]).y;
-            // var dir = dir/Math.abs(dir);
-            // player.rotate(Axis.Y, dir * theta, Space.WORLD);
-            
-            i = (i + 1) % (points.length-1);	//continuous looping  
         });
 
         // Run the render-loop
