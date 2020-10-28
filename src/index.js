@@ -20,6 +20,7 @@ import { sectionData, createTrack } from './lib/createTrack';
 class App {
     constructor() {
         document.body.style.margin = "0px";
+        document.body.style.overflow = "hidden";
         // Create Canvas and attatch to the DOM
         var canvas = document.createElement("canvas");
         canvas.style.width = "100vw";
@@ -36,14 +37,9 @@ class App {
         // Camera
  
         // Parameters : name, position, scene
-        var camera = new UniversalCamera("UniversalCamera", new Vector3(0, 0, -10), scene);
-
-        // Targets the camera to a particular position. In this case the scene origin
+        var camera = new UniversalCamera("UniversalCamera", new Vector3(50, 0, 50), scene);
         camera.setTarget(Vector3.Zero());
-
-        // Attach the camera to the canvas
         camera.attachControl(canvas, true);
-
 
         // Inspector
         window.addEventListener("keydown", (ev) => {
@@ -101,6 +97,7 @@ class App {
         var mtiRatio = 0.0229357798165;
         var totalTime = 0;
         var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
+        let did = false;
         scene.registerAfterRender(function() {
             totalTime += scene.getEngine().getDeltaTime();
             let estimatedPosition = (songTime - totalTime) * mtiRatio;
@@ -117,6 +114,10 @@ class App {
             camera.position.x -= (camera.position.x - player.position.x + 20) / 25
             camera.position.y -= (camera.position.y - player.position.y - 20) / 25
             camera.position.z -= (camera.position.z - player.position.z + 20) / 25
+            if (!did) {
+                did = true; 
+                console.log(player.position);
+            }
         });
 
         // Run the render-loop
@@ -125,4 +126,12 @@ class App {
         });
     }
 }
+
+const easeOutBack = (x) => {
+    const c1 = 1.70158;
+    const c3 = c1 + 1;
+
+    return 1 + c3 * pow(x - 1, 3) + c1 * pow(x - 1, 2);
+}
+
 new App();
