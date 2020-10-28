@@ -61,6 +61,8 @@ class App {
             radius += 0.3;
             angle += 0.1;
         }
+        // Move player to the start of the track
+        player.position = points[points.length - 1];
         // Create track data
         var path3d = new Path3D(points);
         var normals = path3d.getNormals();
