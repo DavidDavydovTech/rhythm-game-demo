@@ -91,6 +91,7 @@ class App {
         var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
         scene.registerAfterRender(function() {
            player.position.x = points[i].x;
+           player.position.y = points[i].y;
            player.position.z = points[i].z;
       
            theta = Math.acos(Vector3.Dot(normals[i],normals[i+1]));
