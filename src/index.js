@@ -4,7 +4,7 @@ import "@babylonjs/loaders/glTF";
 import { 
     Engine, 
     Scene, 
-    FollowCamera, 
+    UniversalCamera, 
     Vector3, 
     Mesh, 
     MeshBuilder, 
@@ -33,19 +33,15 @@ class App {
         scene.clearColor = new Color3(0, 0, 0); // Background color of black
         scene.ambientColor = new Color3(.1, .1, .1); // Full-bright mode
         // Camera
-        var camera = new FollowCamera("FollowCam", new Vector3(0, 10, -10), scene);
-        // Intro Values
-        // camera.radius = 30;
-        // camera.heightOffset = 10;
-        // camera.rotationOffset = 0;
-        // camera.cameraAcceleration = 0.005
-        // camera.maxCameraSpeed = 10
-        // Playing Values
-        camera.radius = 5;
-        camera.heightOffset = 15;
-        camera.rotationOffset = -1;
-        // camera.cameraAcceleration = 0.1;
-        // camera.maxCameraSpeed = 1
+ 
+        // Parameters : name, position, scene
+        var camera = new UniversalCamera("UniversalCamera", new Vector3(0, 0, -10), scene);
+
+        // Targets the camera to a particular position. In this case the scene origin
+        camera.setTarget(Vector3.Zero());
+
+        // Attach the camera to the canvas
+        camera.attachControl(canvas, true);
 
 
         // Inspector
@@ -70,10 +66,10 @@ class App {
         var points = [];
         var radius = 0.1;
         var angle = 0;
-        for (var index = 0; index < 1000; index++) {
-            points.push(new Vector3(radius * Math.cos(angle), 20 * Math.sin(index * 0.1), radius * Math.sin(angle)));
-            radius += 0.3;
-            angle += 0.1;
+        for (var index = 0; index < 2000; index++) {
+            points.push(new Vector3(radius * Math.cos(angle), 20 * Math.sin(index * 0.05), radius * Math.sin(angle)));
+            radius += 0.15;
+            angle += 0.05;
         }
         points = points.reverse();
         // Move player to the start of the track
@@ -103,15 +99,22 @@ class App {
         var i=0;
         var songTime = 225000; // Roughly the time it takes to play secret HIMITSU start to finish + 7 seconds
         var mtiRatio = 0.0229357798165;
+        var totalTime = 0;
         var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
         scene.registerAfterRender(function() {
-            songTime -= scene.getEngine().getDeltaTime();
-            let estimatedPosition = songTime * mtiRatio;
-            player.position = new Vector3(radius * Math.cos(angle), 20 * Math.sin(estimatedPosition * 0.02), radius * Math.sin(angle));
+            totalTime += scene.getEngine().getDeltaTime();
+            let estimatedPosition = (songTime - totalTime) * mtiRatio;
             radius = 0.06 * estimatedPosition;
             angle = 0.02 * estimatedPosition;
+
+            let currentX = radius * Math.cos(angle)
+            let currentY = 20 * Math.sin(estimatedPosition * 0.02)
+            let currentZ = radius * Math.sin(angle)
+            player.position = new Vector3(currentX, currentY, currentZ);
             
-            
+            camera.position.x -= (camera.position.x - player.position.x + 20) / 25
+            camera.position.y -= (camera.position.y - player.position.y - 20) / 25
+            camera.position.z -= (camera.position.z - player.position.z + 20) / 25
             // theta = Math.acos(Vector3.Dot(normals[i],normals[i+1]));
             // var dir = Vector3.Cross(normals[i],normals[i+1]).y;
             // var dir = dir/Math.abs(dir);
