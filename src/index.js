@@ -39,7 +39,7 @@ class App {
         // Parameters : name, position, scene
         var camera = new UniversalCamera("UniversalCamera", new Vector3(50, 0, 50), scene);
         camera.setTarget(Vector3.Zero());
-        camera.attachControl(canvas, true);
+        // camera.attachControl(canvas, true);
 
         // Inspector
         window.addEventListener("keydown", (ev) => {
