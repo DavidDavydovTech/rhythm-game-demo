@@ -15,6 +15,7 @@ import {
     Axis,
     VertexBuffer,
 } from "@babylonjs/core";
+import { sectionData, createTrack } from './lib/createTrack';
 
 class App {
     constructor() {
@@ -58,10 +59,10 @@ class App {
         var points = [new Vector3(0,-1000,0)];
         var radius = 0.1;
         var angle = 0;
-        for (var index = 0; index < 5000; index++) {
-            points.push(new Vector3(radius * Math.cos(angle), 20 * Math.sin(index * 0.02), radius * Math.sin(angle)));
-            radius += 0.06;
-            angle += 0.02;
+        for (var index = 0; index < 1000; index++) {
+            points.push(new Vector3(radius * Math.cos(angle), 20 * Math.sin(index * 0.1), radius * Math.sin(angle)));
+            radius += 0.3;
+            angle += 0.1;
         }
         points = points.reverse();
         // Move player to the start of the track
@@ -89,18 +90,26 @@ class App {
         // });
 
         var i=0;
+        var lastTimeStamp = Date.now();
+        var deltaTime = 0;
+        var songTime = 218000; // Roughly the time it takes to play secret HIMITSU start to finish
+        var mtiRatio = 0.0229357798165;
         var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
         scene.registerAfterRender(function() {
-           player.position.x = points[i].x;
-           player.position.y = points[i].y;
-           player.position.z = points[i].z;
-      
-           theta = Math.acos(Vector3.Dot(normals[i],normals[i+1]));
-           var dir = Vector3.Cross(normals[i],normals[i+1]).y;
-           var dir = dir/Math.abs(dir);
-           player.rotate(Axis.Y, dir * theta, Space.WORLD);
-           
-           i = (i + 1) % (points.length-1);	//continuous looping  
+            deltaTime = lastTimeStamp - Date.now();
+            lastTimeStamp = Date.now();
+            songTime += deltaTime;
+            let estimatedPosition = songTime * mtiRatio;
+            player.position = new Vector3(radius * Math.cos(angle), 20 * Math.sin(estimatedPosition * 0.02), radius * Math.sin(angle));
+            radius = 0.06 * estimatedPosition;
+            angle = 0.02 * estimatedPosition;
+
+            // theta = Math.acos(Vector3.Dot(normals[i],normals[i+1]));
+            // var dir = Vector3.Cross(normals[i],normals[i+1]).y;
+            // var dir = dir/Math.abs(dir);
+            // player.rotate(Axis.Y, dir * theta, Space.WORLD);
+            
+            i = (i + 1) % (points.length-1);	//continuous looping  
         });
 
         // Run the render-loop
