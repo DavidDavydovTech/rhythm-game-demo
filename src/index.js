@@ -4,7 +4,7 @@ import "@babylonjs/loaders/glTF";
 import { 
     Engine, 
     Scene, 
-    ArcRotateCamera, 
+    FollowCamera, 
     Vector3, 
     Mesh, 
     MeshBuilder, 
@@ -33,11 +33,17 @@ class App {
         scene.clearColor = new Color3(0, 0, 0); // Background color of black
         scene.ambientColor = new Color3(.1, .1, .1); // Full-bright mode
         // Camera
-        var camera = new ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, Vector3.Zero(), scene);
-        camera.setPosition(new Vector3(20, 200, 400));
-        camera.maxZ = 20000;
-        camera.lowerRadiusLimit = 150;
-        camera.attachControl(canvas, true);
+        var camera = new FollowCamera("FollowCam", new Vector3(0, 10, -10), scene);
+        camera.radius = 30;
+        // The goal height of camera above local origin (centre) of target
+        camera.heightOffset = 10;
+        // The goal rotation of camera around local origin (centre) of target in x y plane
+        camera.rotationOffset = 0;
+        // Acceleration of camera in moving from current to goal position
+        camera.cameraAcceleration = 0.005
+        // The speed at which acceleration is halted
+        camera.maxCameraSpeed = 10
+
         // Inspector
         window.addEventListener("keydown", (ev) => {
             // Shift+Ctrl+Alt+I
@@ -55,6 +61,7 @@ class App {
         // Create the sphere riding the track
         var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
         player.material = fbRed;
+        camera.lockedTarget = player
         // Create a whirlpool points
         var points = [new Vector3(0,-1000,0)];
         var radius = 0.1;
@@ -90,15 +97,11 @@ class App {
         // });
 
         var i=0;
-        var lastTimeStamp = Date.now();
-        var deltaTime = 0;
         var songTime = 218000; // Roughly the time it takes to play secret HIMITSU start to finish
         var mtiRatio = 0.0229357798165;
         var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
         scene.registerAfterRender(function() {
-            deltaTime = lastTimeStamp - Date.now();
-            lastTimeStamp = Date.now();
-            songTime += deltaTime;
+            songTime -= scene.getEngine().getDeltaTime();
             let estimatedPosition = songTime * mtiRatio;
             player.position = new Vector3(radius * Math.cos(angle), 20 * Math.sin(estimatedPosition * 0.02), radius * Math.sin(angle));
             radius = 0.06 * estimatedPosition;
