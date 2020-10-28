@@ -6,11 +6,11 @@ import {
     Scene, 
     ArcRotateCamera, 
     Vector3, 
-    HemisphericLight, 
     Mesh, 
     MeshBuilder, 
     Path3D, 
     Color3,
+    StandardMaterial,
     VertexBuffer,
 } from "@babylonjs/core";
 
@@ -27,7 +27,8 @@ class App {
         var engine = new Engine(canvas, true);
         // Scene
         var scene = new Scene(engine);
-        scene.clearColor = new Color3(0, 0, 0);
+        scene.clearColor = new Color3(0, 0, 0); // Background color of black
+        scene.ambientColor = new Color3(.1, .1, .1); // Full-bright mode
         // Camera
         var camera = new ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, Vector3.Zero(), scene);
         camera.setPosition(new Vector3(20, 200, 400));
@@ -45,8 +46,12 @@ class App {
                 }
             }
         });
+        // Materials ('fb' stands for full-bright)
+        var fbRed = new StandardMaterial("mat1", scene);
+        fbRed.ambientColor = new Color3(10, .5, .5);
         // Create the sphere riding the track
-        // var player = MeshBuilder.CreateSphere("player", {diameter: 2, diameterX: 3}, scene);
+        var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
+        player.material = fbRed;
         // Create a whirlpool points
         var points = [];
         var radius = 0.5;
