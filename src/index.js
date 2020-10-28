@@ -111,9 +111,9 @@ class App {
             player.position = newPosition;
             
             camera.setTarget(newPosition);
-            camera.position.x -= (camera.position.x - player.position.x + 20) / 25
-            camera.position.y -= (camera.position.y - player.position.y - 20) / 25
-            camera.position.z -= (camera.position.z - player.position.z + 20) / 25
+            camera.position.x += (currentX - camera.position.x + currentX * 0.3) / 25;
+            camera.position.y += (currentY - camera.position.y + 40 - currentY * 1 ) / 25;
+            camera.position.z += (currentZ - camera.position.z + currentZ * 0.3) / 25;
             if (!did) {
                 did = true; 
                 console.log(player.position);
