@@ -168,4 +168,4 @@ const createTrack = function(points, sections) {
 
 }
 
-export { createTrack };
+export { createTrack, sectionData };

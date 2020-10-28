@@ -13,6 +13,7 @@ import {
     Color3,
     VertexBuffer,
 } from "@babylonjs/core";
+import { sectionData, createTrack } from './lib/createTrack';
 
 class App {
     constructor() {
@@ -35,9 +36,6 @@ class App {
         camera.lowerRadiusLimit = 150;
         camera.attachControl(canvas, true);
 
-        var light1 = new HemisphericLight("light1", new Vector3(5, 5, 0), scene);
-        var sphere = MeshBuilder.CreateSphere("sphere", { diameter: 1 }, scene);
-
         // Inspector
         window.addEventListener("keydown", (ev) => {
             // Shift+Ctrl+Alt+I
@@ -49,7 +47,7 @@ class App {
                 }
             }
         });
-        // Create a whirlpool
+        // Create a whirlpool points
         var points = [];
 
         var radius = 0.5;
@@ -60,9 +58,16 @@ class App {
             angle += 0.1;
         }
 
+        // Create a track out of the points
+        var track = createTrack(points, [
+            new sectionData(0, {}),
+            new sectionData(points.length - 1, {}),
+        ]);
+        // Create a whirlpool mesh out of the points
         var whirlpool = Mesh.CreateLines("whirlpool", points, scene, true);
         whirlpool.color = new Color3(1, 1, 1);
 
+        // Animate it
         // var positionData = whirlpool.getVerticesData(VertexBuffer.PositionKind);
         // var heightRange = 10;
         // var alpha = 0;
