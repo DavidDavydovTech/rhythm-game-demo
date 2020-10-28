@@ -29,7 +29,12 @@ const config = {
       appMountId: 'app',
       filename: 'index.html'
     })
-  ]
+  ],
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 8080
+  },
 };
 
 module.exports = config;
