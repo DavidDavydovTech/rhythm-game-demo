@@ -15,6 +15,9 @@ import {
     Axis,
     VertexBuffer,
 } from "@babylonjs/core";
+import {
+    GUI
+} from 'babylonjs-gui';
 import { sectionData, createTrack } from './lib/createTrack';
 
 class App {
@@ -95,11 +98,11 @@ class App {
         var i=0;
         var songTime = 225000; // Roughly the time it takes to play secret HIMITSU start to finish + 7 seconds
         var mtiRatio = 0.0229357798165;
-        var totalTime = 0;
         var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
         let did = false;
+        let firstFrame = performance.now();
         scene.registerAfterRender(function() {
-            totalTime += scene.getEngine().getDeltaTime();
+            let totalTime = (performance.now() - firstFrame);
             let estimatedPosition = (songTime - totalTime) * mtiRatio;
             radius = 0.06 * estimatedPosition;
             angle = 0.02 * estimatedPosition;
