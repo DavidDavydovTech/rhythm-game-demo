@@ -34,15 +34,19 @@ class App {
         scene.ambientColor = new Color3(.1, .1, .1); // Full-bright mode
         // Camera
         var camera = new FollowCamera("FollowCam", new Vector3(0, 10, -10), scene);
-        camera.radius = 30;
-        // The goal height of camera above local origin (centre) of target
-        camera.heightOffset = 10;
-        // The goal rotation of camera around local origin (centre) of target in x y plane
-        camera.rotationOffset = 0;
-        // Acceleration of camera in moving from current to goal position
-        camera.cameraAcceleration = 0.005
-        // The speed at which acceleration is halted
-        camera.maxCameraSpeed = 10
+        // Intro Values
+        // camera.radius = 30;
+        // camera.heightOffset = 10;
+        // camera.rotationOffset = 0;
+        // camera.cameraAcceleration = 0.005
+        // camera.maxCameraSpeed = 10
+        // Playing Values
+        camera.radius = 5;
+        camera.heightOffset = 15;
+        camera.rotationOffset = -1;
+        // camera.cameraAcceleration = 0.1;
+        // camera.maxCameraSpeed = 1
+
 
         // Inspector
         window.addEventListener("keydown", (ev) => {
@@ -63,7 +67,7 @@ class App {
         player.material = fbRed;
         camera.lockedTarget = player
         // Create a whirlpool points
-        var points = [new Vector3(0,-1000,0)];
+        var points = [];
         var radius = 0.1;
         var angle = 0;
         for (var index = 0; index < 1000; index++) {
@@ -97,7 +101,7 @@ class App {
         // });
 
         var i=0;
-        var songTime = 218000; // Roughly the time it takes to play secret HIMITSU start to finish
+        var songTime = 225000; // Roughly the time it takes to play secret HIMITSU start to finish + 7 seconds
         var mtiRatio = 0.0229357798165;
         var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
         scene.registerAfterRender(function() {
@@ -106,7 +110,8 @@ class App {
             player.position = new Vector3(radius * Math.cos(angle), 20 * Math.sin(estimatedPosition * 0.02), radius * Math.sin(angle));
             radius = 0.06 * estimatedPosition;
             angle = 0.02 * estimatedPosition;
-
+            
+            
             // theta = Math.acos(Vector3.Dot(normals[i],normals[i+1]));
             // var dir = Vector3.Cross(normals[i],normals[i+1]).y;
             // var dir = dir/Math.abs(dir);
