@@ -55,14 +55,15 @@ class App {
         var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
         player.material = fbRed;
         // Create a whirlpool points
-        var points = [];
-        var radius = 0.5;
+        var points = [new Vector3(0,-1000,0)];
+        var radius = 0.1;
         var angle = 0;
-        for (var index = 0; index < 1000; index++) {
-            points.push(new Vector3(radius * Math.cos(angle), 10 * Math.sin(index * 0.1), radius * Math.sin(angle)));
-            radius += 0.3;
-            angle += 0.1;
+        for (var index = 0; index < 5000; index++) {
+            points.push(new Vector3(radius * Math.cos(angle), 20 * Math.sin(index * 0.02), radius * Math.sin(angle)));
+            radius += 0.06;
+            angle += 0.02;
         }
+        points = points.reverse();
         // Move player to the start of the track
         player.position = points[points.length - 1];
         // Create track data
