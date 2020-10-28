@@ -1,13 +1,13 @@
 // Author: Unknown
 // Source: https://doc.babylonjs.com/snippets/track
-import * as BABYLON from '@babylonjs/core';
+import { Matrix, Axis, Vector3 } from '@babylonjs/core';
 
-var sectionData = function (startAt, options) {
+const sectionData = function (startAt, options) {
     this.start = startAt;
     this.options = options;
 }
 
-export var createTrack = function(points, sections) {
+const createTrack = function(points, sections) {
 		
     var directions = [];
     var rotations = [];
@@ -87,9 +87,9 @@ export var createTrack = function(points, sections) {
         }
         
         //rail transformation
-        var rotationMatrixY = BABYLON.Matrix.Identity();		
-        var rotationMatrixZ = BABYLON.Matrix.Identity();		
-        var rotationMatrix = BABYLON.Matrix.Identity();
+        var rotationMatrixY = Matrix.Identity();		
+        var rotationMatrixZ = Matrix.Identity();		
+        var rotationMatrix = Matrix.Identity();
         
         var tilt  = 0; //of rail rotation about (0, 0, 1) gives gradient
         var swivel = 0 //rotation of rail around (0, 1, 0)
@@ -98,26 +98,26 @@ export var createTrack = function(points, sections) {
         var deltaTheta = (finalTurn  + 2 * turnTwists * Math.PI - initialTurn) / (nbRails); //increase in theta per rail for lean twist		
         var phi = initialLean;
         var theta = initialTurn;
-        var m = BABYLON.Matrix.Identity();
-        var initialRailDirection = BABYLON.Axis.X;
-        var initialUprightDirection = BABYLON.Axis.Y;
-        var initialLevelDirection = BABYLON.Axis.Z;
-        var railDirection = BABYLON.Vector3.Zero();
-        var uprightDirection = BABYLON.Vector3.Zero();
-        var levelDirection = BABYLON.Vector3.Zero();
-        var leanDirection = BABYLON.Vector3.Zero();
-        var turnDirection = BABYLON.Vector3.Zero();
-        var carriageNormal = BABYLON.Vector3.Zero();
-        BABYLON.Vector3.TransformNormalToRef(initialRailDirection, rotationMatrix, railDirection);
-        var rotationMatrixLean = BABYLON.Matrix.Identity();
-        var rotationMatrixTurn = BABYLON.Matrix.Identity();
-        var rotationMatrixPassenger = BABYLON.Matrix.Identity();
-        var initialPosition = BABYLON.Vector3.Zero();
+        var m = Matrix.Identity();
+        var initialRailDirection = Axis.X;
+        var initialUprightDirection = Axis.Y;
+        var initialLevelDirection = Axis.Z;
+        var railDirection = Vector3.Zero();
+        var uprightDirection = Vector3.Zero();
+        var levelDirection = Vector3.Zero();
+        var leanDirection = Vector3.Zero();
+        var turnDirection = Vector3.Zero();
+        var carriageNormal = Vector3.Zero();
+        Vector3.TransformNormalToRef(initialRailDirection, rotationMatrix, railDirection);
+        var rotationMatrixLean = Matrix.Identity();
+        var rotationMatrixTurn = Matrix.Identity();
+        var rotationMatrixPassenger = Matrix.Identity();
+        var initialPosition = Vector3.Zero();
         
-        var normal = BABYLON.Vector3.Zero();
-        var binormal = BABYLON.Vector3.Zero();
+        var normal = Vector3.Zero();
+        var binormal = Vector3.Zero();
         
-        var rotation = BABYLON.Matrix.Identity();
+        var rotation = Matrix.Identity();
         var gradLean = (finalLean - initialLean) / (nbRails - 1); // lean gradient
         var gradTurn = (finalTurn - initialTurn) / (nbRails - 1); // turn gradient
         var railCount = 0;
@@ -127,11 +127,11 @@ export var createTrack = function(points, sections) {
             swivel = -Math.atan2(railDirection.z, railDirection.x);
             tilt = Math.atan2(Math.abs(railDirection.y), Math.abs(railDirection.x));
             tilt *= Math.sign(railDirection.y);
-            BABYLON.Matrix.RotationAxisToRef(BABYLON.Axis.Y, swivel, rotationMatrixY);			
-            BABYLON.Matrix.RotationAxisToRef(BABYLON.Axis.Z, tilt, rotationMatrixZ);			
+            Matrix.RotationAxisToRef(Axis.Y, swivel, rotationMatrixY);			
+            Matrix.RotationAxisToRef(Axis.Z, tilt, rotationMatrixZ);			
             rotationMatrixZ.multiplyToRef(rotationMatrixY, rotationMatrix);
-            BABYLON.Vector3.TransformNormalToRef(initialUprightDirection, rotationMatrix, uprightDirection);
-            BABYLON.Vector3.TransformNormalToRef(initialLevelDirection, rotationMatrix, levelDirection);
+            Vector3.TransformNormalToRef(initialUprightDirection, rotationMatrix, uprightDirection);
+            Vector3.TransformNormalToRef(initialLevelDirection, rotationMatrix, levelDirection);
             uprightDirection.normalize();
             levelDirection.normalize();
             
@@ -148,11 +148,11 @@ export var createTrack = function(points, sections) {
                 theta += deltaTheta;
             }	
             railCount++;
-            BABYLON.Matrix.RotationAxisToRef(railDirection, phi, rotationMatrixLean);
-            BABYLON.Vector3.TransformNormalToRef(uprightDirection, rotationMatrixLean, carriageNormal);
-            BABYLON.Matrix.RotationAxisToRef(carriageNormal, theta, rotationMatrixTurn);
+            Matrix.RotationAxisToRef(railDirection, phi, rotationMatrixLean);
+            Vector3.TransformNormalToRef(uprightDirection, rotationMatrixLean, carriageNormal);
+            Matrix.RotationAxisToRef(carriageNormal, theta, rotationMatrixTurn);
             
-            BABYLON.Matrix.RotationAxisToRef(initialUprightDirection, theta, rotationMatrixPassenger);
+            Matrix.RotationAxisToRef(initialUprightDirection, theta, rotationMatrixPassenger);
             passengerRotations.push(rotationMatrixPassenger.clone());
             
             rotationMatrix.multiplyToRef(rotationMatrixLean, rotation);
@@ -167,3 +167,5 @@ export var createTrack = function(points, sections) {
     
 
 }
+
+export { createTrack };
