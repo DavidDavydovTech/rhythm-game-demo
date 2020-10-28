@@ -11,6 +11,8 @@ import {
     Path3D, 
     Color3,
     StandardMaterial,
+    Space,
+    Axis,
     VertexBuffer,
 } from "@babylonjs/core";
 
@@ -84,6 +86,20 @@ class App {
 
         //     alpha += 0.05 * scene.getAnimationRatio();
         // });
+
+        var i=0;
+        var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
+        scene.registerAfterRender(function() {
+           player.position.x = points[i].x;
+           player.position.z = points[i].z;
+      
+           theta = Math.acos(Vector3.Dot(normals[i],normals[i+1]));
+           var dir = Vector3.Cross(normals[i],normals[i+1]).y;
+           var dir = dir/Math.abs(dir);
+           player.rotate(Axis.Y, dir * theta, Space.WORLD);
+           
+           i = (i + 1) % (points.length-1);	//continuous looping  
+        });
 
         // Run the render-loop
         engine.runRenderLoop(() => {
