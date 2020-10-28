@@ -55,7 +55,7 @@ class App {
         var radius = 0.5;
         var angle = 0;
         for (var index = 0; index < 1000; index++) {
-            points.push(new Vector3(radius * Math.cos(angle), 0, radius * Math.sin(angle)));
+            points.push(new Vector3(radius * Math.cos(angle), 10 * Math.sin(index * 0.1), radius * Math.sin(angle)));
             radius += 0.3;
             angle += 0.1;
         }
@@ -63,18 +63,19 @@ class App {
         var whirlpool = Mesh.CreateLines("whirlpool", points, scene, true);
         whirlpool.color = new Color3(1, 1, 1);
 
-        var positionData = whirlpool.getVerticesData(VertexBuffer.PositionKind);
-        var heightRange = 10;
-        var alpha = 0;
-        scene.registerBeforeRender(function() {
-            for (var index = 0; index < 1000; index++) {
-                positionData[index * 3 + 1] = heightRange * Math.sin(alpha + index * 0.1);
-            }
+        // var positionData = whirlpool.getVerticesData(VertexBuffer.PositionKind);
+        // var heightRange = 10;
+        // var alpha = 0;
 
-            whirlpool.updateVerticesData(VertexBuffer.PositionKind, positionData);
+        // scene.registerBeforeRender(function() {
+        //     for (var index = 0; index < 1000; index++) {
+        //         positionData[index * 3 + 1] = heightRange * Math.sin(alpha + index * 0.1);
+        //     }
 
-            alpha += 0.05 * scene.getAnimationRatio();
-        });
+        //     whirlpool.updateVerticesData(VertexBuffer.PositionKind, positionData);
+
+        //     alpha += 0.05 * scene.getAnimationRatio();
+        // });
 
         // Run the render-loop
         engine.runRenderLoop(() => {
