@@ -22,6 +22,19 @@ import { sectionData, createTrack } from './lib/createTrack';
 
 class App {
     constructor() {
+        // Player Circle State
+        const playerState = {
+            states: {
+                rs: false,
+                rl: false,
+                bs: false,
+                bl: false,
+            },
+            model: null,
+            updateState: function (state, value) {
+                this.states[state] = value;
+            },
+        }
         // Event Listeners
         // Fullscreen Styles
         document.body.style.margin = "0px";
@@ -77,8 +90,8 @@ class App {
         fbPurpleTrans.ambientColor = new Color3(10, .5, 10);
         fbPurpleTrans.alpha = 0.4;
         // Create the sphere riding the track
-        var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
-        player.material = fbWhite;
+        playerState.model = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
+        playerState.model.material = fbWhite;
         // Create the target instances
         var smallRed = MeshBuilder.CreateSphere("small", {diameter: 2, diameterX: 2, segments: 8}, scene);
         smallRed.material = fbRed;
@@ -103,7 +116,7 @@ class App {
         }
         points = points.reverse();
         // Move player to the start of the track
-        player.position = points[points.length - 1];
+        playerState.model.position = points[points.length - 1];
         // Create track data
         var path3d = new Path3D(points);
         var normals = path3d.getNormals();
@@ -121,7 +134,7 @@ class App {
         const sdAdd = (type, time) => {
             let model = null;
             if (type === 0) {
-                model = player.createInstance(`targetWHITE${stageData.length}`);
+                model = playerState.model.createInstance(`targetWHITE${stageData.length}`);
             } else if (type === 1) {
                 model = smallRed.createInstance(`targetSMALL_R${stageData.length}`);
             } else if (type === 2) {
@@ -141,7 +154,7 @@ class App {
             stageData.push({ time, model });
         }
         for (let i = 0; i < songTime; i += Math.round( Math.random() * 5000 ) ) {
-            sdAdd(Math.floor( Math.random() * 5 + 1 ), i);
+            sdAdd(Math.floor( Math.random() * 6 + 1 ), i);
         }
         sdAdd(3, 4000)
         // Move/Add instances
@@ -154,7 +167,8 @@ class App {
             target.model.position.z = rTarget * Math.sin(aTarget);
         }
         // Stage Data Evaluator
-        const sdEval = () => {}
+        const sdEval = (time) => {
+        }
         // Animation
         scene.registerAfterRender(function() {
             let totalTime = (performance.now() - firstFrame);
@@ -166,7 +180,7 @@ class App {
             let currentY = 20 * Math.sin(estimatedPosition * 0.02)
             let currentZ = radius * Math.sin(angle)
             let newPosition = new Vector3(currentX, currentY, currentZ);
-            player.position = newPosition;
+            playerState.model.position = newPosition;
             
             
             let epFuture = (songTime - totalTime + 1000 * ( ( totalTime  / songTime ) - 1 ) ) * mtiRatio;
@@ -180,10 +194,6 @@ class App {
             camera.position.x += (currentX - camera.position.x + currentX * 0.1) / 25;
             camera.position.y += (currentY - camera.position.y + 25 ) / 25; // - currentY * 1
             camera.position.z += (currentZ - camera.position.z + currentZ * 0.1) / 25;
-            if (!did) {
-                did = true; 
-                // Add models to stage
-            }
         });
 
         // Run the render-loop
