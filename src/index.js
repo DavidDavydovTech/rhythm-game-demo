@@ -33,9 +33,12 @@ class App {
             model: null,
             updateState: function (state, value) {
                 this.states[state] = value;
+                if (this.states.rl && this.states.bl) {
+                    this.model.material = fbPurpleTrans
+                    this.model.diameter = 3;
+                }
             },
         }
-        // Event Listeners
         // Fullscreen Styles
         document.body.style.margin = "0px";
         document.body.style.overflow = "hidden";
@@ -57,8 +60,9 @@ class App {
         camera.setTarget(Vector3.Zero());
         // camera.attachControl(canvas, true);
 
-        // Inspector
+        // Event Listeners
         window.addEventListener("keydown", (ev) => {
+            // Inspector
             // Shift+Ctrl+Alt+I
             if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.keyCode === 73) {
                 if (scene.debugLayer.isVisible()) {
@@ -66,6 +70,34 @@ class App {
                 } else {
                     scene.debugLayer.show();
                 }
+            }
+            // Player Controls
+            if (ev.keyCode === 188) {
+                playerState.updateState('rs', true);
+            }
+            if (ev.keyCode === 190) {
+                playerState.updateState('rl', true);
+            }
+            if (ev.keyCode === 88) {
+                playerState.updateState('bs', true);
+            }
+            if (ev.keyCode === 90) {
+                playerState.updateState('bl', true);
+            }
+        });
+        window.addEventListener("keyup", (ev) => {
+            // Player Controls
+            if (ev.keyCode === 188) {
+                playerState.updateState('rs', false);
+            }
+            if (ev.keyCode === 190) {
+                playerState.updateState('rl', false);
+            }
+            if (ev.keyCode === 88) {
+                playerState.updateState('bs', false);
+            }
+            if (ev.keyCode === 90) {
+                playerState.updateState('bl', false);
             }
         });
         // Materials ('fb' stands for full-bright)
