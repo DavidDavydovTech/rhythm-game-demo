@@ -156,7 +156,15 @@ class App {
             camera.position.z += (currentZ - camera.position.z + currentZ * 0.1) / 25;
             if (!did) {
                 did = true; 
-                console.log(player.position);
+                // Add models to stage
+                for (let target of stageData) {
+                    let pTarget = (songTime - target.time) * mtiRatio;
+                    rTarget = 0.06 * pTarget;
+                    aTarget = 0.02 * pTarget;
+                    targetX = rTarget * Math.cos(aTarget)
+                    targetY = 20 * Math.sin(pTarget * 0.02)
+                    targetZ = rTarget * Math.sin(aTarget)
+                }
             }
         });
 
