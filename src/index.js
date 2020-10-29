@@ -79,6 +79,9 @@ class App {
         // Create the sphere riding the track
         var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
         player.material = fbWhite;
+        // Create the target instances
+        var small = MeshBuilder.CreateSphere("small", {diameter: 2, diameterX: 2, segments: 8}, scene);
+        var large = MeshBuilder.CreateSphere("large", {diameter: 4, diameterX: 4, segments: 8}, scene);
         // Create a whirlpool points
         var points = [];
         var radius = 0.1;
@@ -97,13 +100,12 @@ class App {
         // Create a whirlpool mesh out of the points
         var whirlpool = Mesh.CreateLines("whirlpool", points, scene, true);
         whirlpool.color = new Color3(1, 1, 1);
-
-        var i=0;
+        // Stage Vars
         var songTime = 218000; // Roughly the time it takes to play secret HIMITSU start to finish + 7 seconds
         var mtiRatio = 0.0229357798165;
-        var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
         let did = false;
         let firstFrame = performance.now();
+        // Animation
         scene.registerAfterRender(function() {
             let totalTime = (performance.now() - firstFrame);
             let estimatedPosition = (songTime - totalTime) * mtiRatio;
