@@ -58,22 +58,22 @@ class App {
         fbWhite.ambientColor = new Color3(10, 10, 10);
         var fbWhiteTrans = new StandardMaterial("fbWhiteTrans", scene);
         fbWhiteTrans.ambientColor = new Color3(10, 10, 10);
-        fbWhiteTrans.alpha = 0.5;
+        fbWhiteTrans.alpha = 0.3;
         var fbRed = new StandardMaterial("fbRed", scene);
         fbRed.ambientColor = new Color3(10, .5, .5);
         var fbRedTrans = new StandardMaterial("fbRedTrans", scene);
         fbRedTrans.ambientColor = new Color3(10, .5, .5);
-        fbWhiteTrans.alpha = 0.5;
+        fbRedTrans.alpha = 0.3;
         var fbBlue = new StandardMaterial("fbBlue", scene);
         fbBlue.ambientColor = new Color3(.5, .5, 10);
         var fbBlueTrans = new StandardMaterial("fbBlueTrans", scene);
         fbBlueTrans.ambientColor = new Color3(.5, .5, 10);
-        fbBlueTrans.alpha = 0.5;
+        fbBlueTrans.alpha = 0.3;
         var fbPurple = new StandardMaterial("fbPurple", scene);
         fbPurple.ambientColor = new Color3(10, .5, 10);
         var fbPurpleTrans = new StandardMaterial("fbPurpleTrans", scene);
         fbPurpleTrans.ambientColor = new Color3(10, .5, 10);
-        fbPurpleTrans.alpha = 0.5;
+        fbPurpleTrans.alpha = 0.3;
         // Create the sphere riding the track
         var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
         player.material = fbWhite;
@@ -130,15 +130,18 @@ class App {
 
             stageData.push({ time, model });
         }
+        for (let i = 0; i < songTime; i += Math.round( Math.random() * 5000 ) ) {
+            sdAdd(Math.floor( Math.random() * 5 ), i);
+        }
         sdAdd(3, 4000)
         // Move/Add instances
         for (let target of stageData) {
             let pTarget = (songTime - target.time) * mtiRatio;
             let rTarget = 0.06 * pTarget;
             let aTarget = 0.02 * pTarget;
-            target.model.x = rTarget * Math.cos(aTarget);
-            target.model.y = 20 * Math.sin(pTarget * 0.02);
-            target.model.z = rTarget * Math.sin(aTarget);
+            target.model.position.x = rTarget * Math.cos(aTarget);
+            target.model.position.y = 20 * Math.sin(pTarget * 0.02);
+            target.model.position.z = rTarget * Math.sin(aTarget);
         }
         // Stage Data Evaluator
         // Animation
