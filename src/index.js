@@ -22,6 +22,8 @@ import { sectionData, createTrack } from './lib/createTrack';
 
 class App {
     constructor() {
+        // Event Listeners
+        // Fullscreen Styles
         document.body.style.margin = "0px";
         document.body.style.overflow = "hidden";
         // Create Canvas and attatch to the DOM
@@ -58,22 +60,22 @@ class App {
         fbWhite.ambientColor = new Color3(10, 10, 10);
         var fbWhiteTrans = new StandardMaterial("fbWhiteTrans", scene);
         fbWhiteTrans.ambientColor = new Color3(10, 10, 10);
-        fbWhiteTrans.alpha = 0.3;
+        fbWhiteTrans.alpha = 0.4;
         var fbRed = new StandardMaterial("fbRed", scene);
         fbRed.ambientColor = new Color3(10, .5, .5);
         var fbRedTrans = new StandardMaterial("fbRedTrans", scene);
         fbRedTrans.ambientColor = new Color3(10, .5, .5);
-        fbRedTrans.alpha = 0.3;
+        fbRedTrans.alpha = 0.4;
         var fbBlue = new StandardMaterial("fbBlue", scene);
         fbBlue.ambientColor = new Color3(.5, .5, 10);
         var fbBlueTrans = new StandardMaterial("fbBlueTrans", scene);
         fbBlueTrans.ambientColor = new Color3(.5, .5, 10);
-        fbBlueTrans.alpha = 0.3;
+        fbBlueTrans.alpha = 0.4;
         var fbPurple = new StandardMaterial("fbPurple", scene);
         fbPurple.ambientColor = new Color3(10, .5, 10);
         var fbPurpleTrans = new StandardMaterial("fbPurpleTrans", scene);
         fbPurpleTrans.ambientColor = new Color3(10, .5, 10);
-        fbPurpleTrans.alpha = 0.3;
+        fbPurpleTrans.alpha = 0.4;
         // Create the sphere riding the track
         var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
         player.material = fbWhite;
@@ -86,6 +88,10 @@ class App {
         largeRed.material = fbRedTrans;
         var largeBlue = MeshBuilder.CreateSphere("large", {diameter: 4, diameterX: 4, segments: 8}, scene);
         largeBlue.material = fbBlueTrans;
+        var smallPurple = MeshBuilder.CreateSphere("small", {diameter: 2, diameterX: 2, segments: 8}, scene);
+        smallPurple.material = fbPurple;
+        var largePurple = MeshBuilder.CreateSphere("large", {diameter: 4, diameterX: 4, segments: 8}, scene);
+        largePurple.material = fbPurpleTrans;
         // Create a whirlpool points
         var points = [];
         var radius = 0.1;
@@ -124,6 +130,10 @@ class App {
                 model = largeRed.createInstance(`targetLARGE_R${stageData.length}`);
             } else if (type === 4) {
                 model = largeBlue.createInstance(`targetLARGE_B${stageData.length}`);
+            } else if (type === 5) {
+                model = smallPurple.createInstance(`targetSMALL_P${stageData.length}`);
+            } else if (type === 6) {
+                model = largePurple.createInstance(`targetLARGE_P${stageData.length}`);
             } else {
                 throw new Error(`Got invald type ${type}`);
             }
@@ -131,7 +141,7 @@ class App {
             stageData.push({ time, model });
         }
         for (let i = 0; i < songTime; i += Math.round( Math.random() * 5000 ) ) {
-            sdAdd(Math.floor( Math.random() * 5 ), i);
+            sdAdd(Math.floor( Math.random() * 5 + 1 ), i);
         }
         sdAdd(3, 4000)
         // Move/Add instances
@@ -144,6 +154,7 @@ class App {
             target.model.position.z = rTarget * Math.sin(aTarget);
         }
         // Stage Data Evaluator
+        const sdEval = () => {}
         // Animation
         scene.registerAfterRender(function() {
             let totalTime = (performance.now() - firstFrame);
