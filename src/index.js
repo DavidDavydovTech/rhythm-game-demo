@@ -80,21 +80,6 @@ class App {
         var whirlpool = Mesh.CreateLines("whirlpool", points, scene, true);
         whirlpool.color = new Color3(1, 1, 1);
 
-        // Animate it
-        // var positionData = whirlpool.getVerticesData(VertexBuffer.PositionKind);
-        // var heightRange = 10;
-        // var alpha = 0;
-
-        // scene.registerBeforeRender(function() {
-        //     for (var index = 0; index < 1000; index++) {
-        //         positionData[index * 3 + 1] = heightRange * Math.sin(alpha + index * 0.1);
-        //     }
-
-        //     whirlpool.updateVerticesData(VertexBuffer.PositionKind, positionData);
-
-        //     alpha += 0.05 * scene.getAnimationRatio();
-        // });
-
         var i=0;
         var songTime = 225000; // Roughly the time it takes to play secret HIMITSU start to finish + 7 seconds
         var mtiRatio = 0.0229357798165;
@@ -113,10 +98,18 @@ class App {
             let newPosition = new Vector3(currentX, currentY, currentZ);
             player.position = newPosition;
             
-            camera.setTarget(newPosition);
-            camera.position.x += (currentX - camera.position.x + currentX * 0.3) / 25;
-            camera.position.y += (currentY - camera.position.y + 40 - currentY * 1 ) / 25;
-            camera.position.z += (currentZ - camera.position.z + currentZ * 0.3) / 25;
+            
+            let epFuture = (songTime - totalTime - 1000) * mtiRatio;
+            let rFuture = 0.06 * epFuture;
+            let aFuture = 0.02 * epFuture;
+            let futureX = rFuture * Math.cos(aFuture)
+            let futureY = 20 * Math.sin(epFuture * 0.02)
+            let futureZ = rFuture * Math.sin(aFuture)
+            let futurePosition = new Vector3(futureX, futureY, futureZ);
+            camera.setTarget(futurePosition);
+            camera.position.x += (currentX - camera.position.x + currentX * 0.1) / 25;
+            camera.position.y += (currentY - camera.position.y + 35 + currentY * 0.1 ) / 25; // - currentY * 1
+            camera.position.z += (currentZ - camera.position.z + currentZ * 0.1) / 25;
             if (!did) {
                 did = true; 
                 console.log(player.position);
