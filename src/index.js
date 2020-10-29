@@ -58,12 +58,24 @@ class App {
         // Materials ('fb' stands for full-bright)
         var fbWhite = new StandardMaterial("fbWhite", scene);
         fbWhite.ambientColor = new Color3(10, 10, 10);
+        var fbWhiteTrans = new StandardMaterial("fbWhiteTrans", scene);
+        fbWhiteTrans.ambientColor = new Color3(10, 10, 10);
+        fbWhiteTrans.alpha = 0.5;
         var fbRed = new StandardMaterial("fbRed", scene);
         fbRed.ambientColor = new Color3(10, .5, .5);
+        var fbRedTrans = new StandardMaterial("fbRedTrans", scene);
+        fbRedTrans.ambientColor = new Color3(10, .5, .5);
+        fbWhiteTrans.alpha = 0.5;
         var fbBlue = new StandardMaterial("fbBlue", scene);
         fbBlue.ambientColor = new Color3(.5, .5, 10);
+        var fbBlueTrans = new StandardMaterial("fbBlueTrans", scene);
+        fbBlueTrans.ambientColor = new Color3(.5, .5, 10);
+        fbBlueTrans.alpha = 0.5;
         var fbPurple = new StandardMaterial("fbPurple", scene);
         fbPurple.ambientColor = new Color3(10, .5, 10);
+        var fbPurpleTrans = new StandardMaterial("fbPurpleTrans", scene);
+        fbPurpleTrans.ambientColor = new Color3(10, .5, 10);
+        fbPurpleTrans.alpha = 0.5;
         // Create the sphere riding the track
         var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
         player.material = fbWhite;
