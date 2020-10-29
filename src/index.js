@@ -56,11 +56,17 @@ class App {
             }
         });
         // Materials ('fb' stands for full-bright)
-        var fbRed = new StandardMaterial("mat1", scene);
+        var fbWhite = new StandardMaterial("fbWhite", scene);
+        fbWhite.ambientColor = new Color3(10, 10, 10);
+        var fbRed = new StandardMaterial("fbRed", scene);
         fbRed.ambientColor = new Color3(10, .5, .5);
+        var fbBlue = new StandardMaterial("fbBlue", scene);
+        fbBlue.ambientColor = new Color3(.5, .5, 10);
+        var fbPurple = new StandardMaterial("fbPurple", scene);
+        fbPurple.ambientColor = new Color3(10, .5, 10);
         // Create the sphere riding the track
         var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
-        player.material = fbRed;
+        player.material = fbWhite;
         // Create a whirlpool points
         var points = [];
         var radius = 0.1;
@@ -81,7 +87,7 @@ class App {
         whirlpool.color = new Color3(1, 1, 1);
 
         var i=0;
-        var songTime = 225000; // Roughly the time it takes to play secret HIMITSU start to finish + 7 seconds
+        var songTime = 218000; // Roughly the time it takes to play secret HIMITSU start to finish + 7 seconds
         var mtiRatio = 0.0229357798165;
         var theta = Math.acos(Vector3.Dot(Axis.Z,normals[0]));
         let did = false;
