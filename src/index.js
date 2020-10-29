@@ -38,8 +38,6 @@ class App {
         scene.clearColor = new Color3(0, 0, 0); // Background color of black
         scene.ambientColor = new Color3(.1, .1, .1); // Full-bright mode
         // Camera
- 
-        // Parameters : name, position, scene
         var camera = new UniversalCamera("UniversalCamera", new Vector3(50, 0, 50), scene);
         camera.setTarget(Vector3.Zero());
         // camera.attachControl(canvas, true);
@@ -105,6 +103,32 @@ class App {
         var mtiRatio = 0.0229357798165;
         let did = false;
         let firstFrame = performance.now();
+        // Stage Target Data:
+        let stageData = [];
+        // Stage Data Adder
+        const sdAdd = (type, time) => {
+            let model = null;
+            if (type === 0) {
+                model = player.createInstance(`targetWHITE${stageData.length}`);
+            } else if (type === 1) {
+                model = small.createInstance(`targetSMALL_R${stageData.length}`);
+                model.material = fbRed;
+            } else if (type === 2) {
+                model = small.createInstance(`targetSMALL_B${stageData.length}`);
+                model.material = fbBlue;
+            } else if (type === 3) {
+                model = large.createInstance(`targetLARGE_R${stageData.length}`);
+                model.material = fbRedTrans;
+            } else if (type === 4) {
+                model = large.createInstance(`targetLARGE_B${stageData.length}`);
+                model.material = fbBlueTrans;
+            } else {
+                throw new Error(`Got invald type ${type}`);
+            }
+
+            stageData.push({ time, model });
+        }
+        // Stage Data Evaluator
         // Animation
         scene.registerAfterRender(function() {
             let totalTime = (performance.now() - firstFrame);
@@ -142,5 +166,6 @@ class App {
         });
     }
 }
+
 
 new App();
