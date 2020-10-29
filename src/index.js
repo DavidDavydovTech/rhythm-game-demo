@@ -117,17 +117,13 @@ class App {
             if (type === 0) {
                 model = player.createInstance(`targetWHITE${stageData.length}`);
             } else if (type === 1) {
-                model = small.createInstance(`targetSMALL_R${stageData.length}`);
-                model.material = fbRed;
+                model = smallRed.createInstance(`targetSMALL_R${stageData.length}`);
             } else if (type === 2) {
-                model = small.createInstance(`targetSMALL_B${stageData.length}`);
-                model.material = fbBlue;
+                model = smallBlue.createInstance(`targetSMALL_B${stageData.length}`);
             } else if (type === 3) {
-                model = large.createInstance(`targetLARGE_R${stageData.length}`);
-                model.material = fbRedTrans;
+                model = largeRed.createInstance(`targetLARGE_R${stageData.length}`);
             } else if (type === 4) {
-                model = large.createInstance(`targetLARGE_B${stageData.length}`);
-                model.material = fbBlueTrans;
+                model = largeBlue.createInstance(`targetLARGE_B${stageData.length}`);
             } else {
                 throw new Error(`Got invald type ${type}`);
             }
@@ -135,6 +131,15 @@ class App {
             stageData.push({ time, model });
         }
         sdAdd(3, 4000)
+        // Move/Add instances
+        for (let target of stageData) {
+            let pTarget = (songTime - target.time) * mtiRatio;
+            let rTarget = 0.06 * pTarget;
+            let aTarget = 0.02 * pTarget;
+            target.model.x = rTarget * Math.cos(aTarget);
+            target.model.y = 20 * Math.sin(pTarget * 0.02);
+            target.model.z = rTarget * Math.sin(aTarget);
+        }
         // Stage Data Evaluator
         // Animation
         scene.registerAfterRender(function() {
@@ -164,14 +169,6 @@ class App {
             if (!did) {
                 did = true; 
                 // Add models to stage
-                for (let target of stageData) {
-                    let pTarget = (songTime - target.time) * mtiRatio;
-                    rTarget = 0.06 * pTarget;
-                    aTarget = 0.02 * pTarget;
-                    targetX = rTarget * Math.cos(aTarget)
-                    targetY = 20 * Math.sin(pTarget * 0.02)
-                    targetZ = rTarget * Math.sin(aTarget)
-                }
             }
         });
 
