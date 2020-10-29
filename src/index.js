@@ -99,7 +99,7 @@ class App {
             player.position = newPosition;
             
             
-            let epFuture = (songTime - totalTime - 1000) * mtiRatio;
+            let epFuture = (songTime - totalTime + 1000 * ( ( totalTime  / songTime ) - 1 ) ) * mtiRatio;
             let rFuture = 0.06 * epFuture;
             let aFuture = 0.02 * epFuture;
             let futureX = rFuture * Math.cos(aFuture)
@@ -108,7 +108,7 @@ class App {
             let futurePosition = new Vector3(futureX, futureY, futureZ);
             camera.setTarget(futurePosition);
             camera.position.x += (currentX - camera.position.x + currentX * 0.1) / 25;
-            camera.position.y += (currentY - camera.position.y + 35 + currentY * 0.1 ) / 25; // - currentY * 1
+            camera.position.y += (currentY - camera.position.y + 25 ) / 25; // - currentY * 1
             camera.position.z += (currentZ - camera.position.z + currentZ * 0.1) / 25;
             if (!did) {
                 did = true; 
@@ -121,13 +121,6 @@ class App {
             scene.render();
         });
     }
-}
-
-const easeOutBack = (x) => {
-    const c1 = 1.70158;
-    const c3 = c1 + 1;
-
-    return 1 + c3 * pow(x - 1, 3) + c1 * pow(x - 1, 2);
 }
 
 new App();
