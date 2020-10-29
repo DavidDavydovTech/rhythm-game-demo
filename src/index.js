@@ -33,11 +33,50 @@ class App {
             model: null,
             updateState: function (state, value) {
                 this.states[state] = value;
-                if (this.states.rl && this.states.bl) {
-                    this.model.material = fbPurpleTrans
-                    this.model.diameter = 3;
-                }
+                const { states: { rs, rl, bs, bl } } = this;
+                this.lastVisualUpdateRequest = performance.now();
+                setTimeout(() => {
+                    if (performance.now() > this.lastVisualUpdateRequest + this.visualDelay - 10) {
+                        switch(true) {
+                            case rl && bl:
+                                this.model.material = fbPurpleTrans;
+                                this.setSize(1.5);
+                            break;
+                            case rl:
+                                this.model.material = fbRedTrans;
+                                this.setSize(1.5);
+                            break;
+                            case bl:
+                                this.model.material = fbBlueTrans;
+                                this.setSize(1.5);
+                            break;
+                            case rs && bs:
+                                this.model.material = fbPurpleTrans;
+                                this.setSize(0.5);
+                            break;
+                            case rs:
+                                this.model.material = fbRed;
+                                this.setSize(0.5);
+                            break;
+                            case bs:
+                                this.model.material = fbBlue;
+                                this.setSize(0.5);
+                            break;
+                            default:
+                                this.model.material = fbWhite;
+                                this.setSize(1);
+                        }
+                    }
+                    
+                }, this.visualDelay)
             },
+            setSize: function (n) {
+                this.model.scaling.x = n;
+                this.model.scaling.y = n;
+                this.model.scaling.z = n;
+            },
+            visualDelay: 10,
+            lastVisualUpdateRequest: 0,
         }
         // Fullscreen Styles
         document.body.style.margin = "0px";
