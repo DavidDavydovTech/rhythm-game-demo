@@ -78,8 +78,14 @@ class App {
         var player = MeshBuilder.CreateSphere("player", {diameter: 3, diameterX: 3, segments: 8}, scene);
         player.material = fbWhite;
         // Create the target instances
-        var small = MeshBuilder.CreateSphere("small", {diameter: 2, diameterX: 2, segments: 8}, scene);
-        var large = MeshBuilder.CreateSphere("large", {diameter: 4, diameterX: 4, segments: 8}, scene);
+        var smallRed = MeshBuilder.CreateSphere("small", {diameter: 2, diameterX: 2, segments: 8}, scene);
+        smallRed.material = fbRed;
+        var smallBlue = MeshBuilder.CreateSphere("small", {diameter: 2, diameterX: 2, segments: 8}, scene);
+        smallBlue.material = fbBlue;
+        var largeRed = MeshBuilder.CreateSphere("large", {diameter: 4, diameterX: 4, segments: 8}, scene);
+        largeRed.material = fbRedTrans;
+        var largeBlue = MeshBuilder.CreateSphere("large", {diameter: 4, diameterX: 4, segments: 8}, scene);
+        largeBlue.material = fbBlueTrans;
         // Create a whirlpool points
         var points = [];
         var radius = 0.1;
@@ -128,6 +134,7 @@ class App {
 
             stageData.push({ time, model });
         }
+        sdAdd(3, 4000)
         // Stage Data Evaluator
         // Animation
         scene.registerAfterRender(function() {
